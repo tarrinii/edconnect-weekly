@@ -1,0 +1,36 @@
+{
+	"name": "edconnect",
+	"version": "1.0.0",
+	"description": "Edconnect project - July 2020 batch",
+	"main": "./server/index.js",
+	"scripts": {
+		"dev": "nodemon server/index.js",
+		"start": "cross-env NODE_ENV=production node server/index.js"
+	},
+	"author": "edconnect",
+	"license": "MIT",
+	"dependencies": {
+		"@react-ssr/core": "^0.24.0",
+		"@react-ssr/express": "^0.24.0",
+		"axios": "^0.19.2",
+		"body-parser": "^1.19.0",
+		"dotenv": "^8.2.0",
+		"express": "^4.17.1",
+		"express-flash": "0.0.2",
+		"express-session": "^1.17.1",
+		"mongoose": "^5.9.25",
+		"mongoose-data-seed": "^2.1.6",
+		"morgan": "^1.10.0",
+		"multer": "^1.4.2",
+		"react": "^16.13.1",
+		"react-bootstrap": "^1.2.2",
+		"react-dom": "^16.13.1"
+	},
+	"devDependencies": {
+		"cross-env": "^7.0.2",
+		"nodemon": "^2.0.4"
+	},
+	"mdSeed": {
+		"seedersFolder": "./seeders"
+	}
+}
