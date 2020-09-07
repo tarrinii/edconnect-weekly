@@ -6,13 +6,11 @@ const {
 } = require('mongodb-memory-server');
 
 const express = require('express');
-const register = require('@react-ssr/express/register');
 const childProcess = require("child_process");
 const path = require("path");
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const session = require('express-session');
-const flash = require('express-flash');
 
 const SERVER_PORT = process.env.SERVER_PORT;
 const MONGO_PORT = process.env.MONGO_PORT || 27017;
@@ -22,8 +20,7 @@ const app = express();
 app.use('/uploads', express.static('routes/uploads'));
 
 const initApp = async () => {
-    await register(app);
-
+ 
     app.use((req, res, next) => {
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
@@ -43,10 +40,8 @@ const initApp = async () => {
         resave: true,
         saveUninitialized: false
     }));
-    app.use(flash());
 
     app.use('/', require('./routes/api'));
-    app.use('/', require('./routes/router'));
 
     app.listen(SERVER_PORT, () => {
         console.log(`Server running on port ${SERVER_PORT}`)
@@ -56,7 +51,8 @@ const initApp = async () => {
 (async () => {
     try {
        const conn =  await mongoose.connect('mongodb://127.0.0.1:27017/edconnect', {
-            useNewUrlParser: true
+            useNewUrlParser: true,
+            useUnifiedTopology: true 
         })
        await  conn.connection.close();
 
