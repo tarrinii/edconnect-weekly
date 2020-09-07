@@ -41,8 +41,8 @@ project.submit = (name, abstract, authors, tags, createdBy) => {
 
     project.name = name;
     project.abstract = abstract;
-    project.authors = authors.split(',').map(_ => _.trim()).filter(_ => _.length > 0);
-    project.tags = tags.split('#').map(_ => _.trim()).filter(_ => _.length > 0);
+    project.authors = authors.map(_ => _.trim()).filter(_ => _.length > 0);
+    project.tags = tags.map(_ => _.trim()).filter(_ => _.length > 0);
     project.createdBy = createdBy;
 
     return project.save()

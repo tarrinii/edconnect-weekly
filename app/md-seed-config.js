@@ -2,9 +2,6 @@ const mongoose = require('mongoose');
 const Programs = require('./seeders/program.seeder').default;
 const Users = require('./seeders/user.seeder').default;
 
-const port = process.env.MONGO_PORT || 27017
-const MONGO_URI = `mongodb://${process.env.MONGO_HOST}:${port}/edconnect`;
-
 /**
  * Seeders List
  * order is important
@@ -19,7 +16,7 @@ exports.seedersList = {
  * Connect to mongodb implementation
  * @return {Promise}
  */
-exports.connect = async () => await mongoose.connect(MONGO_URI, { 
+exports.connect = async () => await mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true

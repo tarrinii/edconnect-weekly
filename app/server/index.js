@@ -1,5 +1,10 @@
 require('dotenv').config();
 
+const mongoose = require('mongoose');
+const {
+    MongoMemoryServer
+} = require('mongodb-memory-server');
+
 const express = require('express');
 const register = require('@react-ssr/express/register');
 const childProcess = require("child_process");
@@ -10,14 +15,13 @@ const session = require('express-session');
 const flash = require('express-flash');
 
 const SERVER_PORT = process.env.SERVER_PORT;
-
-childProcess.execSync(`${path.join(__dirname, "../node_modules/.bin/md-seed")} run`);
-
+const MONGO_PORT = process.env.MONGO_PORT || 27017;
+process.env.MONGO_URI = `mongodb://127.0.0.1:${MONGO_PORT}/edconnect`;
 const app = express();
 
 app.use('/uploads', express.static('routes/uploads'));
 
-(async () => {
+const initApp = async () => {
     await register(app);
 
     app.use((req, res, next) => {
@@ -28,10 +32,14 @@ app.use('/uploads', express.static('routes/uploads'));
 
     app.use(morgan('combined'));
     app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(bodyParser.urlencoded({
+        extended: true
+    }));
     app.use(session({
         secret: 'SOmeSEcretSalt!',
-        cookie: { maxAge: 1000 * 60 * 60 * 24 * 7 },
+        cookie: {
+            maxAge: 1000 * 60 * 60 * 24 * 7
+        },
         resave: true,
         saveUninitialized: false
     }));
@@ -43,4 +51,26 @@ app.use('/uploads', express.static('routes/uploads'));
     app.listen(SERVER_PORT, () => {
         console.log(`Server running on port ${SERVER_PORT}`)
     });
-})();
+};
+
+(async () => {
+    try {
+       const conn =  await mongoose.connect('mongodb://127.0.0.1:27017/edconnect', {
+            useNewUrlParser: true
+        })
+       await  conn.connection.close();
+
+    } catch (error) {
+        const db = new MongoMemoryServer({
+            instance: {
+                port: MONGO_PORT,
+                dbName: 'edconnect'
+            }
+        });
+        const url = await db.getUri();
+    }
+})().then(() => {
+    childProcess.execSync(`${path.join(__dirname, "../node_modules/.bin/md-seed")} run`);
+    initApp();
+
+})

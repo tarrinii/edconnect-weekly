@@ -35,7 +35,7 @@ user.register = (firstname, lastname, email, password, matricNumber, program, gr
                 displayName: `${user.firstname} ${user.lastname}`
             }];
         })
-        .catch(error => [null, error]);
+       .catch(error => [null, error]);
 }
 
 user.update = (id, firstname, lastname, email, matricNumber, program, graduationYear) => {

@@ -1,8 +1,8 @@
 const axios = require('axios');
 
-const SERVER_PORT = process.env.SERVER_PORT;
+const baseURL = '/api';
 const api = axios.create({
-    baseURL: `http://localhost:${SERVER_PORT}/api`,
+    baseURL,
     headers: {
         "Content-type": "application/json"
     }
